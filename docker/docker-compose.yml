@@ -1,8 +1,8 @@
 version: '2.2'
 services:
-  es01:
+  elasticServer:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
-    container_name: es01
+    container_name: elasticServer
     environment:
       - discovery.type=single-node
     ulimits:
@@ -10,11 +10,34 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./data:/usr/share/elasticsearch/data
+      - ./analysis/synonym.txt:/usr/share/elasticsearch/config/analysis/synonym.txt
+#      - ./data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - elastic
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    container_name: kibanaServer
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - elastic
+    ports:
+      - 5601:5601
+    links:
+      - "elasticServer:elasticsearch"
+  clientCourse:
+    image: alpine:3.10
+    container_name: clientCourse
+    volumes:
+        - ./client/:/home/client/
+        - ../course/:/home/course/
+    links:
+        - "elasticServer:elastic"
+    networks:
+        - elastic
+    command: sh -c "ls /home && ls -l /home/client && exec /home/client/init.sh"
 
 networks:
   elastic:

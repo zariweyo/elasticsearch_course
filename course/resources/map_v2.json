@@ -1,0 +1,60 @@
+{
+    "settings": {
+        "analysis" : {
+            "analyzer":{
+              "custom_es": {
+                  "tokenizer": "standard",
+                  "filter":  [ "lowercase", "default_spanish_stopwords", "default_spanish_stemmer","synonym"]
+              },
+              "custom_en": {
+                "tokenizer": "standard",
+                "filter":  [ "lowercase", "default_english_stop", "default_english_stemmer","default_english_possessive_stemmer","synonym"]
+              }
+            }, 
+            "filter" : {
+                "default_spanish_stemmer" : {
+                    "type" : "stemmer",
+                    "name" : "light_spanish"
+                },
+                "default_spanish_stopwords": {
+                    "type":        "stop",
+                    "stopwords":  "_spanish_"  
+                },
+                "default_english_stop": {
+                  "type":       "stop",
+                  "stopwords":  "_english_" 
+                },
+                "default_english_stemmer": {
+                  "type":       "stemmer",
+                  "language":   "english"
+                },
+                "default_english_possessive_stemmer": {
+                  "type":       "stemmer",
+                  "language":   "possessive_english"
+                },
+                "synonym" : {
+                  "type" : "synonym",
+                  "synonyms_path" : "analysis/synonym.txt"
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "municipality": {
+                "type": "text",
+                "analyzer" : "custom_es"
+            },
+            "province": {
+                "type": "text",
+                "analyzer" : "custom_es"
+            },
+            "cod_municipality": {
+                "type": "keyword"
+            },
+            "cod_province": {
+                "type": "keyword"
+            }
+        }
+    }
+}

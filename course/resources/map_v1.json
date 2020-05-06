@@ -1,0 +1,18 @@
+{
+    "mappings": {
+        "properties": {
+            "municipality": {
+                "type": "text"
+            },
+            "province": {
+                "type": "text"
+            },
+            "cod_municipality": {
+                "type": "keyword"
+            },
+            "cod_province": {
+                "type": "keyword"
+            }
+        }
+    }
+}
